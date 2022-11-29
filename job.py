@@ -39,7 +39,7 @@ class Job:
         else:
             self.end_at = None
         self.tries = tries
-        self.dependencies = dependencies if dependencies is not None else []
+        self.dependencies = dependencies or []
         self.task = task(*args, **kwargs)
         self.id = uid()
 
