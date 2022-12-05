@@ -34,6 +34,9 @@ class Scheduler:
                       self._queue.append, [task])
             t.start()
             return False
+        if task.dependencies:
+            for dependency in task.dependencies:
+                self.schedule(dependency)
         self._queue.append(task)
         return True
 
@@ -43,18 +46,7 @@ class Scheduler:
             return self._queue.pop(0)
 
     def _run_task(self, task: Job | None) -> None:
-        """Runs a task.
-           Прошу описать в docstring как корутины из task.dependencies
-           будут выполняться. Пока это не очень понятно.
-
-           Я исходил из того, что в зависимостях находятся функции,
-           которые мы отдельно должны запланировать. Таким образом
-           тут просто проверяется, что если зависимость находится
-           в очереди, то текущую таску мы не запускаем.
-
-           Подразумавается ли, что тут может быть свой набор корутин,
-           которые мы тоже должны добавить в планировщик отдельно?
-        """
+        """Runs a task."""
         if task is None:
             return
 
